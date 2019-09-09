@@ -35,15 +35,14 @@ export default class UploadButton extends Component {
     if(beforeUpload){
       beforeUpload();
     }
-    message.success('上传成功')
     return true
   }
 
   @Bind()
-  onChange({ file, fileList}){
+  onChange({fileList}){
     const { onChange } = this.props;
     if(onChange && isFunction(onChange)){
-      onChange(file,fileList)
+      onChange(fileList)
     }
   }
 

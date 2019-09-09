@@ -109,8 +109,7 @@ export default {
     },
     *upload({ payload }, { put, select }){
       const file =yield select(({ tableDemo }) => tableDemo.file )
-      file.splice(file.indexOf(item=>item.workNumber===payload.workNumber),1,payload)
-      console.log(file)
+      file.splice(file.findIndex(item=>item.workNumber===payload.workNumber),1,payload)
       yield put ({type: 'save', payload: { file }})
     }
   },

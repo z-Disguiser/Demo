@@ -10,6 +10,7 @@ function TableDemo({ tableDemo, dispatch }) {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [visible, setVisible] = useState(false);
   const [fileList, setFileList] = useState([]);
+  const [workNumber, setWorkNumber] = useState(null);
 
   const selections = [
     {
@@ -106,31 +107,24 @@ function TableDemo({ tableDemo, dispatch }) {
    * @param {Boolean} status 上传modal状态
    */
   const changeModal = (status,record)=>{
-  //  console.log('tttt', record)
     setVisible(status);
     if(record && record.workNumber){
       const fileList = file.find(item=>item.workNumber===record.workNumber).fileList
       setFileList(fileList || [])
+      setWorkNumber(record.workNumber);
     }
   }
 
-  const onChange=(file, fileList, record)=>{
-    console.log( record)
-    const { workNumber } = record;
+  const onChange=( fileList)=>{
     const newFile = {
       workNumber,
-      fileList:FileList
+      fileList
     };
-  
     dispatch({
       type: 'tableDemo/upload',
       payload: newFile,
     });
-  }
-  
-  
-  const editData= (record)=>{
-    console.log('record', record);
+    setFileList(fileList || [])
   }
 
   
@@ -162,7 +156,7 @@ function TableDemo({ tableDemo, dispatch }) {
         render:((value,record)=>{
           return (
             <Fragment>
-              <a onClick={()=>editData(record)}>编辑</a>
+              <a>编辑</a>
               <Divider type="vertical"></Divider>
               <a onClick={()=>deleteData([record.workNumber])}>删除</a>
               <Divider type="vertical"></Divider>
@@ -171,7 +165,7 @@ function TableDemo({ tableDemo, dispatch }) {
                 visible={visible}
                 accept='.png'
                 fileList={fileList}
-                onChange={()=>onChange(file, fileList, record)}
+                onChange={onChange}
                 fileType='image/png'
                 onCancel={()=>changeModal(false)}
                 openModal={()=>changeModal(true,record)}
