@@ -46,6 +46,15 @@ export default class UploadButton extends Component {
     }
   }
 
+  /**
+   * 图片预览
+   * @param {*} file
+   */
+  @Bind()
+  handlePreview(file){
+    
+  }
+
   render() {
     const {
       accept,
