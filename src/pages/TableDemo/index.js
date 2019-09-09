@@ -115,6 +115,10 @@ function TableDemo({ tableDemo, dispatch }) {
     }
   }
 
+  /**
+   * 附件onChange
+   * @param {Array} fileList 展示的文件列表
+   */
   const onChange=( fileList)=>{
     const newFile = {
       workNumber,
@@ -125,6 +129,10 @@ function TableDemo({ tableDemo, dispatch }) {
       payload: newFile,
     });
     setFileList(fileList || [])
+  }
+
+  const edit=(_,record)=>{
+
   }
 
   
@@ -156,7 +164,7 @@ function TableDemo({ tableDemo, dispatch }) {
         render:((value,record)=>{
           return (
             <Fragment>
-              <a>编辑</a>
+              <a onClick={edit}>编辑</a>
               <Divider type="vertical"></Divider>
               <a onClick={()=>deleteData([record.workNumber])}>删除</a>
               <Divider type="vertical"></Divider>
@@ -166,6 +174,7 @@ function TableDemo({ tableDemo, dispatch }) {
                 accept='.png'
                 fileList={fileList}
                 onChange={onChange}
+                previewType={true}
                 fileType='image/png'
                 onCancel={()=>changeModal(false)}
                 openModal={()=>changeModal(true,record)}

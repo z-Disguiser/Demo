@@ -84,6 +84,7 @@ export default {
     *fetch({ payload }, { call, put }) {
       yield put({ type: 'save' });
     },
+
     *queryList({ payload }, { select }) {
       const dataSource = yield select(({ tableDemo }) => tableDemo.dataSource )
       const keys = Object.keys(payload);
@@ -100,6 +101,7 @@ export default {
         }
       })
     },
+
     *delete({ payload }, { put ,select }){
       const dataSource =yield select(({ tableDemo }) => tableDemo.dataSource )
       payload.forEach(item=>{
@@ -107,6 +109,13 @@ export default {
       })
       yield put({type: 'save', payload: { dataSource }})
     },
+
+    *queryUpload({ payload }, { put, select }){
+      const file =yield select(({ tableDemo }) => tableDemo.file )
+      const fileList = file.find(item=>item.workNumber===payload)
+      return new Promise(resolve=>resolve(fileList))
+    },
+
     *upload({ payload }, { put, select }){
       const file =yield select(({ tableDemo }) => tableDemo.file )
       file.splice(file.findIndex(item=>item.workNumber===payload.workNumber),1,payload)

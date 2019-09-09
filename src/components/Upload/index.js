@@ -9,6 +9,8 @@ export default class UploadButton extends Component {
     super(props);
     this.state = {
       loading: false,
+      previewImage: '',
+      previewVisible:false,
     }
   }
 
@@ -18,6 +20,16 @@ export default class UploadButton extends Component {
   //     fileList:record.fileList
   //   })
   // }
+
+  @Bind()
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
 
   @Bind()
   beforeUpload(file){
@@ -51,9 +63,26 @@ export default class UploadButton extends Component {
    * @param {*} file
    */
   @Bind()
-  handlePreview(file){
-    
+  async handlePreview(file){
+    const { previewType } = this.props;
+    if(previewType){
+      if(!file.url && !file.preview){
+        file.preview = await this.getBase64(file.originFileObj);
+      }
+      this.setState({
+        previewImage: file.url || file.preview,
+        previewVisible: true,
+      })
+    }else{
+      return fetch('https://next.json-generator.com/api/json/get/4ytyBoLK8', {
+      method: 'POST',
+      body: file,
+    })
+      .then(res => res.json())
+      .then(({ thumbnail }) => thumbnail);
+    }
   }
+    
 
   render() {
     const {
@@ -64,8 +93,10 @@ export default class UploadButton extends Component {
       onCancel,
       openModal,
     } = this.props;
-    // const{
-    // } = this.state;
+    const{
+      previewImage,
+      previewVisible,
+    } = this.state;
 
     const uploadButton = (
       <div>
@@ -80,6 +111,7 @@ export default class UploadButton extends Component {
           onChange={this.onChange}
           accept={accept}
           name="avatar"
+          onPreview={this.handlePreview}
           fileList={fileList}
           listType="picture-card"
           beforeUpload={this.beforeUpload}
@@ -104,6 +136,13 @@ export default class UploadButton extends Component {
           maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
         >
           {modalContent}
+        </Modal>
+        <Modal
+          visible={previewVisible}
+          footer={null}
+          onCancel={()=>this.setState({previewVisible:false})}
+        >
+          <img alt='' src={previewImage} style={{width:"100%"}}/>
         </Modal>
       </Fragment>
     )
