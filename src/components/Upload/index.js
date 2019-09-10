@@ -64,8 +64,9 @@ export default class UploadButton extends Component {
    */
   @Bind()
   async handlePreview(file){
-    const { previewType } = this.props;
-    if(previewType){
+    console.log(file)
+    const { preview } = this.props;
+    if(preview){
       if(!file.url && !file.preview){
         file.preview = await this.getBase64(file.originFileObj);
       }
@@ -87,6 +88,7 @@ export default class UploadButton extends Component {
   render() {
     const {
       accept,
+      single,
       btnText,
       visible,
       fileList,
@@ -117,7 +119,7 @@ export default class UploadButton extends Component {
           beforeUpload={this.beforeUpload}
           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         >
-          {uploadButton}
+          {single && fileList.length<1 && uploadButton}
         </Upload>
       </Fragment>
     )
@@ -138,8 +140,9 @@ export default class UploadButton extends Component {
           {modalContent}
         </Modal>
         <Modal
-          visible={previewVisible}
           footer={null}
+          closable={false}
+          visible={previewVisible}
           onCancel={()=>this.setState({previewVisible:false})}
         >
           <img alt='' src={previewImage} style={{width:"100%"}}/>

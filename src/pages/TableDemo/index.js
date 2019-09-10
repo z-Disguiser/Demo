@@ -112,6 +112,7 @@ function TableDemo({ tableDemo, dispatch }) {
       const fileList = file.find(item=>item.workNumber===record.workNumber).fileList
       setFileList(fileList || [])
       setWorkNumber(record.workNumber);
+      console.log(fileList)
     }
   }
 
@@ -174,7 +175,8 @@ function TableDemo({ tableDemo, dispatch }) {
                 accept='.png'
                 fileList={fileList}
                 onChange={onChange}
-                previewType={true}
+                preview={false}
+                single={true}
                 fileType='image/png'
                 onCancel={()=>changeModal(false)}
                 openModal={()=>changeModal(true,record)}
