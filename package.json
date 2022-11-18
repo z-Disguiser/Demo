@@ -11,7 +11,7 @@
     "dva": "^2.4.1",
     "less": "^2.7.3",
     "lodash-decorators": "^6.0.1",
-    "umi": "^1.0.0",
+    "umi": "^4.0.32",
     "umi-plugin-dva": "^0.7.1"
   },
   "devDependencies": {
